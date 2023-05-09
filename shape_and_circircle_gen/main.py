@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 from create_shapes import easy_poly_gen
 from move_overlapping import move_and_rotate
-from calculate_cir_circle import calc_cir_circle_diameter
+from calculate_cir_circle import calc_cir_circle_radius
 
 
 FIELD_DIAMETER = 20
@@ -24,7 +24,7 @@ polys_copy = polys.copy()
 
 non_overlapping_polygons = move_and_rotate(polys, FIELD_DIAMETER, STEP_SIZE, ROTATE_SIZE, STEP_TYPE, ROTATE_TYPE)
 
-minimum_circle_diameter = calc_cir_circle_diameter(non_overlapping_polygons)
+minimum_circle_diameter = calc_cir_circle_radius(non_overlapping_polygons)
 
 # plot two plots side by side, one with the original polygons and one with the non-overlapping polygons
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 7))

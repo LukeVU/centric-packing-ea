@@ -1,6 +1,7 @@
 import math, random
 from typing import List, Tuple
 from shapely.geometry import Polygon
+from shapely import affinity
 
 
 class Poly:
@@ -31,3 +32,22 @@ class Poly:
             distances.append(math.sqrt(point[0]**2 + point[1]**2))
         # return the point with the maximum distance
         return all_points[distances.index(max(distances))]
+    
+    def translate(self, x_offset: float, y_offset: float):
+        """
+        Moves the polygon by the given x and y offsets. Maintains the rotation of the polygon.
+        """
+        self.polygon = affinity.translate(self.polygon, x_offset, y_offset)
+        
+
+    def rotate(self, angle: float):
+        """
+        Rotates the polygon by the given angle. Maintains the rotation of the polygon.
+        """
+        self.polygon = affinity.rotate(self.polygon, angle)
+        self.rotation += angle
+        if self.rotation > 360:
+            self.rotation -= 360
+        elif self.rotation < 0:
+            self.rotation += 360
+    

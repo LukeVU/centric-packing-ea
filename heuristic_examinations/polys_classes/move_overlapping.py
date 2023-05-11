@@ -54,15 +54,15 @@ def move_and_rotate(polys: List[Poly], field_diameter: int, step_size: float, ro
                 x_offset = -polygon.polygon.centroid.x
                 y_offset = -polygon.polygon.centroid.y
                 # move the polygon to the center
-                polygon = Poly(affinity.translate(polygon.polygon, x_offset, y_offset))
+                polygon.translate(x_offset, y_offset)
                 print("Moved polygon to center: {}".format(polygon))
             # randomly offset the polygon by a uniform amount
             x_offset, y_offset = step_calculator(step_size, step_type)
             old_polygon = polygon
-            polygon = Poly(affinity.translate(polygon.polygon, x_offset, y_offset))
+            polygon.translate(x_offset, y_offset)
             # randomly rotate the polygon by a uniform amount
             angle = rotate_calculator(rotate_size, rotate_type)
-            polygon = Poly(affinity.rotate(polygon.polygon, angle))
+            polygon.rotate(angle)
             polygon.rotation += angle
 
             # print("Moved polygon from {} to {}".format(old_polygon, polygon))
@@ -166,8 +166,8 @@ def randomize_shape_location_rotation(poly: Poly, field_diameter: int) -> Poly:
     rotation = random.uniform(0, 360)
 
     # Move and rotate the polygon
-    current_center = poly.centroid
-    new_poly = Poly(affinity.translate(poly.polygon, new_center[0] - current_center.x, new_center[1] - current_center.y))
-    new_poly = Poly(affinity.rotate(new_poly.polygon, rotation))
+    current_center = poly.polygon.centroid
+    poly.translate(new_center[0] - current_center.x, new_center[1] - current_center.y)
+    poly.rotate(rotation)
 
-    return new_poly
+    return poly

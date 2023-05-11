@@ -14,7 +14,6 @@ class PolyGroup(object):
     def __init__(self, polys: List[Poly], **kwargs):
         self._polys = polys
         self.count = len(polys)
-        self.circle = self.get_minimal_circumscribed_circle_radius()
 
     def __str__(self):
         """Returns a string representation of the PolyGroup."""
@@ -31,8 +30,12 @@ class PolyGroup(object):
         """
         # create a list of all points in all polygons
         all_points = []
+        test = 1
         for poly in self._polys:
-            all_points.extend(poly.exterior.coords)
+            print(poly)
+            print(f"HET TEST GETALLLLLLL{test}")
+            test += 1
+            all_points.extend(poly.polygon.exterior.coords)
         # for all points, calculate the distance to the center (0,0)
         distances = []
         for point in all_points:

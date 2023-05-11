@@ -11,17 +11,17 @@ print(population[1])
 fig, axs = plt.subplots(1, 2, figsize=(10, 5))
 axs[0].set_title("Poly Group 1")
 axs[1].set_title("Poly Group 2")
-for i in range(2):
-    for poly in population[i]._polys:
-        x, y = poly.exterior.xy
-        axs[i].plot(x, y, color="#6699cc", alpha=0.7, linewidth=3, solid_capstyle="round", zorder=2)
-        axs[i].set_aspect("equal")
-        axs[i].set_xlim(-20, 20)
-        axs[i].set_ylim(-20, 20)
-        axs[i].set_facecolor("#ffffff")
-        axs[i].grid(True)
+for i in range(len(population)):
+    #make the first poly in the poly group red
+    axs[i].plot(*population[i]._polys[0].exterior.xy, color="red")
+    #make the other polys in the poly group blue
+    for j in range(1, len(population[i]._polys)):
+        axs[i].plot(*population[i]._polys[j].exterior.xy, color="blue")
+    # set the x and y limits of the plot to the field diameter
+    axs[i].set_xlim(-20, 20)
+    axs[i].set_ylim(-20, 20)
+    # set the aspect ratio to 1 so that the polygons are not distorted
+    axs[i].set_aspect(1)
 
 plt.tight_layout()
-plt.show()
-
 plt.show()

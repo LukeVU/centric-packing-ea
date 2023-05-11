@@ -47,7 +47,6 @@ def easy_poly_gen(number_of_polys: int, field_diameter: int, size: float,
 
         # Create the polygon
         new_poly = Poly(generate_polygon(center, size, irregularity, spikiness, num_vertices))
-        print(new_poly.rotation)
         polygons.append(new_poly)
 
     group = PolyGroup(polygons)

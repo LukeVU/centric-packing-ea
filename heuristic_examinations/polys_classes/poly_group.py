@@ -5,15 +5,17 @@ from shapely.geometry import Polygon
 from .poly import Poly
 from .move_overlapping import move_and_rotate, randomize_shape_location_rotation
 
+# TODO: add a method to PolyGroup that returns the fitness of the PolyGroup.
+# can be calculated by using the surface area of the combined polys, and the (surface area of the) smallest circle that can contain all polys
 
-class PolyGroup(object):
+class PolyGroup(List[Poly]):
     """
     Class for a group of polygons with additional methods.
     """
 
     def __init__(self, polys: List[Poly], **kwargs):
         self._polys = polys
-        self.count = len(polys)
+        self.give_polys_index()
 
     def __str__(self):
         """Returns a string representation of the PolyGroup."""
@@ -24,6 +26,12 @@ class PolyGroup(object):
 
         return "\n".join(poly_str_list)
     
+    def give_polys_index(self) -> None:
+        """Gives each polygon in the PolyGroup an index attribute.
+        """
+        for i in range(len(self._polys)):
+            self._polys[i].index = i
+    
     def get_minimal_circumscribed_circle_radius(self) -> float:
         """
         Calculates the radius of the smallest circle that can contain all polygons in the list.
@@ -32,8 +40,6 @@ class PolyGroup(object):
         all_points = []
         test = 1
         for poly in self._polys:
-            print(poly)
-            print(f"HET TEST GETALLLLLLL{test}")
             test += 1
             all_points.extend(poly.polygon.exterior.coords)
         # for all points, calculate the distance to the center (0,0)
@@ -53,6 +59,25 @@ class PolyGroup(object):
         """
         self._polys = [randomize_shape_location_rotation(poly, field_diameter) for poly in self._polys]
         # self._polys = randomize_shape_location_rotation(self._polys, field_diameter) 
+
+    def copy(self) -> "PolyGroup":
+        """Returns a copy of the PolyGroup.
+        """
+        new_polys = []
+        for poly in self._polys:
+            new_poly = Poly(poly.polygon.exterior.coords)
+            new_poly.rotation = poly.rotation
+            new_polys.append(new_poly)
+
+        new_poly_group = PolyGroup(new_polys)
+        for i in range(len(new_poly_group._polys)):
+            new_poly_group._polys[i].index = self._polys[i].index
+        return new_poly_group
+    
+    def shuffle(self) -> None:
+        """Shuffles the order of the polygons in the PolyGroup.
+        """
+        random.shuffle(self._polys)
 
 
 

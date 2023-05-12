@@ -21,11 +21,7 @@ def generate_population(number_of_poly_groups : int, number_of_polys: int, field
     # for each PolyGroup in the population, create a new Poly object for each polygon in the PolyGroup
     population_unique = []
     for poly_group in population:
-        new_polys = []
-        for poly in poly_group._polys:
-            new_polys.append(Poly(poly.exterior.coords))
-        print(new_polys)
-        population_unique.append(PolyGroup(new_polys))
+        population_unique.append(poly_group.copy())
 
 
     # for each PolyGroup in the population, randomize the locations and rotations of the polygons, then move them so that they don't overlap

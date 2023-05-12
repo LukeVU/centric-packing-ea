@@ -49,33 +49,26 @@ def move_and_rotate(polys: List[Poly], field_diameter: int, step_size: float, ro
         while overlaps_with_others(polygon, polys) or overlaps_with_others(polygon, non_overlapping_polygons) or outside_field(polygon, field_diameter):
             # if outside the field, move to the center
             if outside_field(polygon, field_diameter):
-                print("OUTSIDE")
                 # calculate the distance to the center
                 x_offset = -polygon.polygon.centroid.x
                 y_offset = -polygon.polygon.centroid.y
                 # move the polygon to the center
                 polygon.translate(x_offset, y_offset)
-                print("Moved polygon to center: {}".format(polygon))
             # randomly offset the polygon by a uniform amount
             x_offset, y_offset = step_calculator(step_size, step_type)
-            old_polygon = polygon
             polygon.translate(x_offset, y_offset)
             # randomly rotate the polygon by a uniform amount
             angle = rotate_calculator(rotate_size, rotate_type)
             polygon.rotate(angle)
-            polygon.rotation += angle
 
-            # print("Moved polygon from {} to {}".format(old_polygon, polygon))
         # if the polygon doesn't overlap with any others, add it to the list of non-overlapping polygons
         non_overlapping_polygons.append(polygon)
-        print("Added polygon {}".format(polygon))
 
     return non_overlapping_polygons
 
 def overlaps_with_others(polygon, polygons):
     for other in polygons:
         if other.polygon.intersects(polygon.polygon):
-            print("OVERPAP")
             return True
     return False
 

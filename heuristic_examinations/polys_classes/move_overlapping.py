@@ -68,8 +68,15 @@ def move_and_rotate(polys: List[Poly], field_diameter: int, step_size: float, ro
 
 def overlaps_with_others(polygon, polygons):
     for other in polygons:
-        if other.polygon.intersects(polygon.polygon):
-            return True
+        # check if other and polygon are the same object
+        if other is not polygon:
+            print("other is not polygon")
+            if other.polygon.intersects(polygon.polygon):
+                print("other intersects polygon")
+                return True
+        else:
+            print("other is polygon")
+    print("no overlap")
     return False
 
 def outside_field(polygon, field_diameter):

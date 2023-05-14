@@ -5,8 +5,6 @@ from shapely.geometry import Polygon
 from .poly import Poly
 from .move_overlapping import move_and_rotate, randomize_shape_location_rotation
 
-# TODO: add a method to PolyGroup that returns the fitness of the PolyGroup.
-# can be calculated by using the surface area of the combined polys, and the (surface area of the) smallest circle that can contain all polys
 
 class PolyGroup(List[Poly]):
     """
@@ -78,6 +76,19 @@ class PolyGroup(List[Poly]):
         """Shuffles the order of the polygons in the PolyGroup.
         """
         random.shuffle(self._polys)
+
+    def fitness(self) -> float:
+        """Returns the fitness of the PolyGroup.
+        """
+        # calculate the surface area of the combined polygons
+        combined_poly_area = 0
+        for poly in self._polys:
+            combined_poly_area += poly.polygon.area
+        # calculate the surface area of the smallest circle that can contain all polygons
+        minimal_circumscribed_circle_radius = self.get_minimal_circumscribed_circle_radius()
+        minimal_circumscribed_circle_area = math.pi * minimal_circumscribed_circle_radius**2
+        # return the fitness
+        return combined_poly_area / minimal_circumscribed_circle_area
 
 
 

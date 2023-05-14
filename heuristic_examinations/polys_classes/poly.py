@@ -51,3 +51,17 @@ class Poly:
         elif self.rotation < 0:
             self.rotation += 360
     
+    def copy(self):
+        """
+        Returns a copy of the polygon.
+        """
+        rotation = self.rotation
+
+        poly_copy = Poly(self.polygon)
+        poly_copy.rotation = rotation
+
+        if self.index is not None:
+            index = self.index
+            poly_copy.index = index
+
+        return poly_copy

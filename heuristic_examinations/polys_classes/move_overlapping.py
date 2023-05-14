@@ -70,13 +70,8 @@ def overlaps_with_others(polygon, polygons):
     for other in polygons:
         # check if other and polygon are the same object
         if other is not polygon:
-            print("other is not polygon")
             if other.polygon.intersects(polygon.polygon):
-                print("other intersects polygon")
                 return True
-        else:
-            print("other is polygon")
-    print("no overlap")
     return False
 
 def outside_field(polygon, field_diameter):

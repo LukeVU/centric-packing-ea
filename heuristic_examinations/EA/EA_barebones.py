@@ -9,8 +9,8 @@ from ..polys_classes import step_calculator, rotate_calculator, overlaps_with_ot
 
 class EABarebones(List[PolyGroup]):
     def __init__(self, num_survivors, field_diameter, num_children, std = 0.01,
-                rotate_size = 0.1, rotate_type = "triangular", step_type = "triangular", 
-                step_size = 0.1, attempts = 100):
+                rotate_size = 10, rotate_type = "triangular", step_type = "triangular", 
+                step_size = 10, attempts = 100):
         self.num_survivors = num_survivors
         self.field_diameter = field_diameter
         self.std = std #the standard deviation, used as the proportion that a value can mutate with
@@ -35,7 +35,7 @@ class EABarebones(List[PolyGroup]):
 
         while len(children) < self.num_children:
             child = random.choice(parents)
-            children.append(child)
+            children.append(child.copy())
 
         # shuffle the children list
         random.shuffle(children)
@@ -90,36 +90,33 @@ class EABarebones(List[PolyGroup]):
 
 
 
-def randomly_move_polys_to_legal_locations(polys: PolyGroup, field_diameter: int, step_size: float, step_type: str = "triangular", rotate_size: float = 0.1, rotate_type: str = "uniform", attempts: int = 100) -> List[Poly]:
+def randomly_move_polys_to_legal_locations(polys: PolyGroup, field_diameter: int, step_size: float, step_type: str, rotate_size: float, rotate_type: str, attempts: int) -> List[Poly]:
     """Moves and rotates the polygons in the PolyGroup until they no longer overlap with each other or go outside the field.
     """
     # iterate over each polygon in the input list. the polygon is randomly moved and rotated. if it overlaps with another polygon or goes outside the field, it is moved back to its original position and the process is repeated.
-    number_of_legal_moves = 0
-    number_of_illegal_moves = 0
-    polys = polys._polys
-    for poly in polys:
-        old_poly = poly
+    moved_polys = []
+    while len(polys._polys) > 0:
+        attempts_countdown = attempts
+        new_poly = polys._polys[0].copy()
+        changing_poly = polys._polys[0].copy()
+        polys._polys.remove(polys._polys[0])
         x_offset, y_offset = step_calculator(step_size, step_type)
         angle = rotate_calculator(rotate_size, rotate_type)
-        poly.translate(x_offset, y_offset)
-        poly.rotate(angle)
-        poly_attempts = attempts
-        while (overlaps_with_others(poly, polys) or outside_field(poly, field_diameter)) and poly_attempts > 0:
-            print(f"overlaps_with_others: {overlaps_with_others(poly, polys)}")
-            print(f"outside_field: {outside_field(poly, field_diameter)}")
-            poly = old_poly
+        changing_poly.translate(x_offset, y_offset)
+        changing_poly.rotate(angle)
+        while (overlaps_with_others(changing_poly, polys) or overlaps_with_others(changing_poly, moved_polys) or outside_field(changing_poly, field_diameter)) and attempts > 0:
+            changing_poly = new_poly.copy()
+            changing_poly.translate(x_offset, y_offset)
+            changing_poly.rotate(angle)
             x_offset, y_offset = step_calculator(step_size, step_type)
             angle = rotate_calculator(rotate_size, rotate_type)
-            poly.translate(x_offset, y_offset)
-            poly.rotate(angle)
-            poly_attempts -= 1
-        if poly_attempts == 0:
-            poly = old_poly
-            number_of_illegal_moves += 1
-            
+            changing_poly.translate(x_offset, y_offset)
+            changing_poly.rotate(angle)
+            attempts_countdown -= 1
+        if attempts_countdown == 0:
+            moved_polys.append(new_poly)
         else:
-            number_of_legal_moves += 1
-            
-    print(f"Number of using old location: {number_of_illegal_moves}")
-    print(f"Number of using new location: {number_of_legal_moves}")
+            moved_polys.append(changing_poly)
+
+    polys._polys = moved_polys
     return polys

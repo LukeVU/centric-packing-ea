@@ -1,1 +1,1 @@
-from .plotter import plot_generation
+from .plotter import plot_generation, plot_first_and_last

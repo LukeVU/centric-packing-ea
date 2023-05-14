@@ -11,7 +11,7 @@ class PolyGroup(List[Poly]):
     Class for a group of polygons with additional methods.
     """
 
-    def __init__(self, polys: List[Poly], **kwargs):
+    def __init__(self, polys: List[Poly]):
         self._polys = polys
         self.give_polys_index()
 

@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from matplotlib.cm import get_cmap
 from matplotlib.colors import Normalize
 import math
+import numpy as np
 
 def plot_generation(generation, field_diameter, save=False, save_name=""):
     num_cols = math.ceil(len(generation) / 2)
@@ -79,4 +80,52 @@ def plot_first_and_last(first, last, field_diameter):
     axs[1].add_artist(circle_last)
 
     plt.tight_layout()
+    plt.show()
+
+
+def plot_fitness_over_time(complete_run):
+    # plot the fitness of the best poly group in each generation. the y axis is the fitness and the x axis is the number of evaluations.
+    # the number of evaluations is the number of generations multiplied by the number of children + parents per generation
+    num_evaluations = len(complete_run) * (len(complete_run[0]) + len(complete_run[0][0]._polys))
+    fitness_list = []
+    for generation in complete_run:
+        fitness_list.append(generation[0].fitness())
+    plt.plot(range(len(complete_run)), fitness_list)
+    # make the x axis display num_evaluations over 10 intervals
+    plt.xticks(range(0, len(complete_run), len(complete_run)//10), range(0, num_evaluations, num_evaluations//10))
+    plt.title("Fitness Over Time")
+    plt.xlabel("Evaluations")
+    plt.ylabel("Fitness")
+    plt.show()
+
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+def plot_fitness_over_time_multiple_runs(complete_runs, num_evaluations):
+    num_evaluations = num_evaluations * (len(complete_runs[0])-1)
+    fitness_lists = []
+    for complete_run in complete_runs:
+        fitness_list = []
+        for generation in complete_run:
+            fitness_list.append(generation[0].fitness())
+        fitness_lists.append(fitness_list)
+    
+    for fitness_list in fitness_lists:
+        plt.plot(range(len(complete_runs[0])), fitness_list, color="gray", linewidth=0.5)
+    
+    averaged_fitness_list = []
+    for i in range(len(fitness_lists[0])):
+        averaged_fitness_list.append(sum(fitness_lists[j][i] for j in range(len(fitness_lists))) / len(fitness_lists))
+    plt.plot(range(len(complete_runs[0])), averaged_fitness_list, color="black", linewidth=2)
+    
+    # Set the x-axis tick locations and labels
+    tick_intervals = num_evaluations // 10
+    tick_locations = np.arange(0, len(complete_runs[0]), len(complete_runs[0]) // 10)
+    tick_labels = [i * tick_intervals for i in range(len(tick_locations))]
+    plt.xticks(ticks=tick_locations, labels=tick_labels)
+    
+    plt.title("Fitness Over Time")
+    plt.xlabel("Evaluations")
+    plt.ylabel("Fitness")
     plt.show()

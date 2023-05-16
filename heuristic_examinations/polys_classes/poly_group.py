@@ -24,11 +24,21 @@ class PolyGroup(List[Poly]):
 
         return "\n".join(poly_str_list)
     
+    def __getstate__(self):
+        """Returns the state of the PolyGroup as a dictionary."""
+        return self.__dict__
+    
+    def __setstate__(self, state):
+        """Sets the state of the PolyGroup from a dictionary."""
+        self.__dict__ = state
+    
     def give_polys_index(self) -> None:
         """Gives each polygon in the PolyGroup an index attribute.
         """
-        for i in range(len(self._polys)):
-            self._polys[i].index = i
+        # check if the polygons already have an index attribute
+        if not (all(hasattr(poly, "index") for poly in self._polys)):
+            for i in range(len(self._polys)):
+                self._polys[i].index = i
     
     def get_minimal_circumscribed_circle_radius(self) -> float:
         """

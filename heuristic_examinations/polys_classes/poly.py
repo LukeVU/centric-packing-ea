@@ -18,6 +18,12 @@ class Poly:
     def __str__(self):
         return f"Poly: {self.exterior.coords[:-1]}"
     
+    def __getstate__(self):
+        return self.__dict__
+    
+    def __setstate__(self, state):
+        self.__dict__ = state
+    
     def get_furthest_point(self) -> Tuple[float, float]:
         """
         Calculates the point in the polygon that is furthest away from the center (0,0).

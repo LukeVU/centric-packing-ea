@@ -5,32 +5,29 @@ import math
 import numpy as np
 
 def plot_generation(generation, field_diameter, save=False, save_name=""):
-    num_cols = math.ceil(len(generation) / 2)
-    fig, axs = plt.subplots(2, num_cols, figsize=(15, 10))
+    num_cols = len(generation)
+    fig, axs = plt.subplots(1, num_cols, figsize=(15, 5))
     for i in range(len(generation)):
-        row = i // num_cols
-        col = i % num_cols
-        axs[row, col].set_title("Poly Group " + str(i))
-
-    for i in range(len(generation)):
-        row = i // num_cols
-        col = i % num_cols
         # plot the polygons in the poly group
         for poly in generation[i]._polys:
-            axs[row, col].plot(*poly.polygon.exterior.xy)
+            axs[i].plot(*poly.polygon.exterior.xy)
         # add the rotation of each polygon at the centroid of each polygon
         for poly in generation[i]._polys:
             rotation_string = str(round(poly.rotation, 2))
-            axs[row, col].text(poly.polygon.centroid.x-(len(rotation_string))/2.5, poly.polygon.centroid.y, rotation_string)
+            axs[i].text(poly.polygon.centroid.x-(len(rotation_string))/2.5, poly.polygon.centroid.y, rotation_string)
         # set the x and y limits of the plot to the field diameter
-        axs[row, col].set_xlim(-field_diameter, field_diameter)
-        axs[row, col].set_ylim(-field_diameter, field_diameter)
+        axs[i].set_xlim(-field_diameter, field_diameter)
+        axs[i].set_ylim(-field_diameter, field_diameter)
         # set the aspect ratio to 1 so that the polygons are not distorted
-        axs[row, col].set_aspect(1)
+        axs[i].set_aspect(1)
         # give each polygon an exterior color based on its index. it has no fill color
         for poly in generation[i]._polys:
             x, y = poly.polygon.exterior.xy
-            axs[row, col].fill(x, y, color=(poly.index/len(generation[i]._polys), 0, 0, 0), linewidth=1)
+            axs[i].fill(x, y, color=(poly.index/len(generation[i]._polys), 0, 0, 0), linewidth=1)
+
+        for poly in generation[i]._polys:
+            index_string = str(poly.index)
+            axs[i].text(poly.polygon.centroid.x-(len(index_string))/2.5, poly.polygon.centroid.y - 2, index_string)
 
     plt.tight_layout()
     if save:

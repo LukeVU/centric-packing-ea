@@ -5,10 +5,12 @@ from ..polys_classes import PolyGroup
 from ..polys_classes import Poly
 # from ..shape_creation import copy_polygroup
 from ..polys_classes import step_calculator, rotate_calculator, overlaps_with_others, outside_field
-from .ea__functions import randomly_move_polys_to_legal_locations
+from .ea__functions import randomly_move_polys_to_legal_locations, create_recombined_child
+
+from ..plotter import plot_generation
 
 
-class EABarebones(List[PolyGroup]):
+class EARecombination(List[PolyGroup]):
     def __init__(self, num_survivors, field_diameter, num_children, std = 0.01,
                 rotate_size = 10, rotate_type = "triangular", step_type = "triangular", 
                 step_size = 10, attempts = 100):
@@ -23,21 +25,32 @@ class EABarebones(List[PolyGroup]):
         self.attempts = attempts
 
     def parent_selection(self, generation):
-        # starts with len(generation) parents, which should be the same as the population size
-        parents = generation
-        # when actually performing recombination, the number of parents would be pairs, and thus half the population size
-        # however, since the parents are not actually recombined, the number of parents is the same as the population size
+        # NOTE: currently only works with even population sizes
+        generation_copy = []
+        for polygroup in generation:
+            generation_copy.append(polygroup.copy())
+
+        parents = []
+        while len(generation_copy) > 0:
+            # select 2 parents at random from the generation and add them to the parents list. then remove them from the generation
+            parent1 = generation_copy.pop(random.randrange(len(generation_copy)))
+            parent2 = generation_copy.pop(random.randrange(len(generation_copy)))
+            parents.append([parent1, parent2])
+        # the number of parents should be equal to the population size divided by 2
         return parents
     
     def recombination(self, parents):
-        # with crossover, the number of parents would be pairs, and thus half the population size
-        # however, since the parents are not actually recombined, the number of parents is the same as the population size
+        # the input parents list should be a list of pairs of parents
         children = []
 
+        # randomly select a parent pair from the parents list
         while len(children) < self.num_children:
-            child = random.choice(parents)
-            children.append(child.copy())
-
+            parent_pair = random.choice(parents)
+            # create a child from the parent pair
+            child: PolyGroup = create_recombined_child(parent_pair)
+            child.non_overlap(self.field_diameter, self.step_size, self.step_type, self.rotate_size, self.rotate_type)
+            children.append(child)
+            
         # shuffle the children list
         random.shuffle(children)
 
@@ -62,7 +75,14 @@ class EABarebones(List[PolyGroup]):
     def survivor_selection(self, parents, children):
         # here the populations size exceeds the num_survivors parameter, as the parents and children are combined. the population size is num_survivors + num_children
         # combine the parents and children lists
-        population = parents + children
+        # single_parents = []
+        # for parent_pair in parents:
+        #     single_parents.append(parent_pair[0])
+        #     single_parents.append(parent_pair[1])
+
+        single_parents = [parent for parent_pair in parents for parent in parent_pair]
+
+        population = single_parents + children
         # sort the population by fitness
         population.sort(key = lambda x: x.fitness(), reverse = True)
         # return the top pop_size number of polygons
@@ -82,12 +102,3 @@ class EABarebones(List[PolyGroup]):
         survivors = self.survivor_selection(parents, mutated_children)
         # return the survivors
         return survivors
-
-
-
-
-
-
-
-
-

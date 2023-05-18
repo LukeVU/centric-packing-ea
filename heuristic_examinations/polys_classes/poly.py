@@ -11,6 +11,7 @@ class Poly:
         self.polygon = Polygon(*args, **kwargs)
         self.rotation = 0.0
         self.furthest_point = self.get_furthest_point()
+        # self.index = None
 
     def __getattr__(self, attr):
         return getattr(self.polygon, attr)

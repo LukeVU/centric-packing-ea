@@ -41,7 +41,7 @@ def randomly_move_polys_to_legal_locations(polys: PolyGroup, field_diameter: int
 
 
 
-def create_recombined_child(parents: List[PolyGroup]) -> PolyGroup:
+def create_recombined_child(parents: List[PolyGroup], field_diameter, step_size, step_type, rotate_size, rotate_type) -> PolyGroup:
     """ For each polygon in the parent, calculate a location and rotation in between the locations and rotations of the two parents.
     """
     list_of_children = []
@@ -62,7 +62,16 @@ def create_recombined_child(parents: List[PolyGroup]) -> PolyGroup:
                 new_poly: Poly = parents[1]._polys[j].copy()
                 new_poly.index = parents[1]._polys[j].index
                 new_poly.rotation = parents[1]._polys[j].rotation 
+                distance_moved = math.sqrt((x_delta/2 + tri_value*x_delta/2)**2 + (y_delta/2 + tri_value*y_delta/2)**2) 
                 new_poly.translate(x_delta/2 + tri_value*x_delta/2, y_delta/2 + tri_value*y_delta/2)
                 new_poly.rotate(total_rotation)
+                new_poly.distance_moved = distance_moved
                 list_of_children.append(new_poly)
-    return PolyGroup(list_of_children)
+
+    # make sure that none of the polygons are overlapping in the new child
+    # sort the list of polygons by distance moved, in descending order
+    list_of_children.sort(key = lambda x: x.distance_moved, reverse = True)
+    poly_list = PolyGroup(list_of_children)
+    poly_list.non_overlap(field_diameter, step_size, step_type, rotate_size, rotate_type)
+    poly_list.shuffle()
+    return poly_list

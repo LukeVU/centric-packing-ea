@@ -47,8 +47,7 @@ class EARecombination(List[PolyGroup]):
         while len(children) < self.num_children:
             parent_pair = random.choice(parents)
             # create a child from the parent pair
-            child: PolyGroup = create_recombined_child(parent_pair)
-            child.non_overlap(self.field_diameter, self.step_size, self.step_type, self.rotate_size, self.rotate_type)
+            child: PolyGroup = create_recombined_child(parent_pair, self.field_diameter, self.step_size, self.step_type, self.rotate_size, self.rotate_type)
             children.append(child)
             
         # shuffle the children list

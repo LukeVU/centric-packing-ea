@@ -3,6 +3,8 @@ from matplotlib.cm import get_cmap
 from matplotlib.colors import Normalize
 import math
 import numpy as np
+import os
+import datetime
 
 def plot_generation(generation, field_diameter, save=False, save_name=""):
     num_cols = len(generation)
@@ -96,10 +98,7 @@ def plot_fitness_over_time(complete_run):
     plt.show()
 
 
-import matplotlib.pyplot as plt
-import numpy as np
-
-def plot_fitness_over_time_multiple_runs(complete_runs, num_evaluations):
+def plot_fitness_over_time_multiple_runs(complete_runs, num_evaluations, ea: str):
     num_evaluations = num_evaluations * (len(complete_runs[0])-1)
     fitness_lists = []
     for complete_run in complete_runs:
@@ -115,14 +114,47 @@ def plot_fitness_over_time_multiple_runs(complete_runs, num_evaluations):
     for i in range(len(fitness_lists[0])):
         averaged_fitness_list.append(sum(fitness_lists[j][i] for j in range(len(fitness_lists))) / len(fitness_lists))
     plt.plot(range(len(complete_runs[0])), averaged_fitness_list, color="black", linewidth=2)
+
+    std_list = []
+    for i in range(len(fitness_lists[0])):
+        std = np.std([fitness_lists[j][i] for j in range(len(fitness_lists))])
+        std_list.append((averaged_fitness_list[i] - std, averaged_fitness_list[i] + std))
+
+    plt.fill_between(range(len(complete_runs[0])), [item[0] for item in std_list], [item[1] for item in std_list], alpha=0.2, color='black')
     
+
+    final_std = np.std(averaged_fitness_list)
+    final_upper_std = averaged_fitness_list[-1] + final_std
+    final_lower_std = averaged_fitness_list[-1] - final_std
+    final_average = sum(averaged_fitness_list) / len(averaged_fitness_list)
+
+
     # Set the x-axis tick locations and labels
     tick_intervals = num_evaluations // 10
     tick_locations = np.arange(0, len(complete_runs[0]), len(complete_runs[0]) // 10)
     tick_labels = [i * tick_intervals for i in range(len(tick_locations))]
     plt.xticks(ticks=tick_locations, labels=tick_labels)
+
+    # set the y axis tick locations and labels
+    tick_intervals = 0.1
+    tick_locations = np.arange(0, 0.6, 0.1)
+    tick_labels = [round(i * tick_intervals, 1) for i in range(len(tick_locations))]
+    plt.yticks(ticks=tick_locations, labels=tick_labels)
     
-    plt.title("Fitness Over Time")
+    plt.title(f"Averaged Fitness Over {len(complete_runs)} Runs, {ea}")
     plt.xlabel("Evaluations")
     plt.ylabel("Fitness")
-    plt.show()
+
+    plt.text(0.6, 0.1, f"Final Average: {final_average:.3f}\nFinal Std Range: {(final_upper_std-final_lower_std):.3f}", transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5, boxstyle='round'))
+
+    # plt.show()
+    return plt
+
+def plot_saver(plot, num_runs: int, number_of_generations : int, number_of_polys: int, ea: str):
+    now = datetime.datetime.now()
+    file_name = f"{ea}_{num_runs}runs_{number_of_generations}generations_{number_of_polys}polys___{now.year}_{now.month}_{now.day}_{now.hour}_{now.minute}.png"
+    folder_name = f"{num_runs}runs_{number_of_generations}generations_{number_of_polys}polys"
+    file_path = os.path.join(os.path.dirname(__file__), "..", "plots", "fitness_plots", folder_name, file_name)
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    plot.savefig(file_path)
+    plot.close()

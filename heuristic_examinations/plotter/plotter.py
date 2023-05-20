@@ -108,7 +108,7 @@ def plot_fitness_over_time_multiple_runs(complete_runs, num_evaluations, ea: str
         fitness_lists.append(fitness_list)
     
     for fitness_list in fitness_lists:
-        plt.plot(range(len(complete_runs[0])), fitness_list, color="gray", linewidth=0.5)
+        plt.plot(range(len(complete_runs[0])), fitness_list, color="gray", linewidth=0.3)
     
     averaged_fitness_list = []
     for i in range(len(fitness_lists[0])):
@@ -122,18 +122,14 @@ def plot_fitness_over_time_multiple_runs(complete_runs, num_evaluations, ea: str
 
     plt.fill_between(range(len(complete_runs[0])), [item[0] for item in std_list], [item[1] for item in std_list], alpha=0.2, color='black')
     
-
-    final_std = np.std(averaged_fitness_list)
-    final_upper_std = averaged_fitness_list[-1] + final_std
-    final_lower_std = averaged_fitness_list[-1] - final_std
-    final_average = sum(averaged_fitness_list) / len(averaged_fitness_list)
-
+    final_average = averaged_fitness_list[-1]
+    final_std_range = std*2
 
     # Set the x-axis tick locations and labels
     tick_intervals = num_evaluations // 10
     tick_locations = np.arange(0, len(complete_runs[0]), len(complete_runs[0]) // 10)
     tick_labels = [i * tick_intervals for i in range(len(tick_locations))]
-    plt.xticks(ticks=tick_locations, labels=tick_labels)
+    plt.xticks(ticks=tick_locations, labels=tick_labels, rotation=45)
 
     # set the y axis tick locations and labels
     tick_intervals = 0.1
@@ -145,14 +141,23 @@ def plot_fitness_over_time_multiple_runs(complete_runs, num_evaluations, ea: str
     plt.xlabel("Evaluations")
     plt.ylabel("Fitness")
 
-    plt.text(0.6, 0.1, f"Final Average: {final_average:.3f}\nFinal Std Range: {(final_upper_std-final_lower_std):.3f}", transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5, boxstyle='round'))
+    plt.text(0.6, 0.1, f"Final Average: {final_average:.3f}\nFinal Std Range: {(final_std_range):.3f}", transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5, boxstyle='round'))
 
+    # set image size
+    plt.gcf().set_size_inches(8, 6)
+
+    # set size of the plot
+    plt.gcf().subplots_adjust(left=0.1, bottom=0.15)
     # plt.show()
     return plt
 
-def plot_saver(plot, num_runs: int, number_of_generations : int, number_of_polys: int, ea: str):
-    now = datetime.datetime.now()
-    file_name = f"{ea}_{num_runs}runs_{number_of_generations}generations_{number_of_polys}polys___{now.year}_{now.month}_{now.day}_{now.hour}_{now.minute}.png"
+def plot_saver(complete_runs, num_runs: int, number_of_generations : int, number_of_polys: int, ea: str, time_params: str = None):
+    plot = plot_fitness_over_time_multiple_runs(complete_runs, number_of_generations, ea)
+    if time_params is None:
+        now = datetime.datetime.now()
+        file_name = f"{ea}_{num_runs}runs_{number_of_generations}generations_{number_of_polys}polys___{now.year}_{now.month}_{now.day}_{now.hour}_{now.minute}.png"
+    else:
+        file_name = f"{ea}_{num_runs}runs_{number_of_generations}generations_{number_of_polys}polys___{time_params}.png"
     folder_name = f"{num_runs}runs_{number_of_generations}generations_{number_of_polys}polys"
     file_path = os.path.join(os.path.dirname(__file__), "..", "plots", "fitness_plots", folder_name, file_name)
     os.makedirs(os.path.dirname(file_path), exist_ok=True)

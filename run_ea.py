@@ -1,7 +1,7 @@
 from heuristic_examinations.shape_creation import generate_population, create_saved_population_group, read_population_group
 import matplotlib.pyplot as plt
 from heuristic_examinations.polys_classes import PolyGroup, Poly
-from heuristic_examinations.ea import EABarebones, EARecombination
+from heuristic_examinations.ea import EABarebones, EARecombination, EAMutateCloser
 from heuristic_examinations.plotter import plot_generation, plot_first_and_last, plot_fitness_over_time, plot_fitness_over_time_multiple_runs, plot_saver
 from tqdm import tqdm
 import datetime
@@ -18,10 +18,11 @@ NUM_RUNS = 30
 
 class_mappings = {
     "EABarebones": EABarebones,
-    "EARecombination": EARecombination
+    "EARecombination": EARecombination,
+    "EAMutateCloser": EAMutateCloser
 }
 
-list_of_eas = ["EABarebones", "EARecombination"]
+list_of_eas = ["EAMutateCloser"]
 # BELOW IS FOR GENERATING A NEW POPULATION
 # create_saved_population_group(num_populations= NUM_RUNS, number_of_poly_groups= NUM_SURVIVORS, number_of_polys= NUM_POLYS, field_diameter= FIELD_DIAMETER)
 

@@ -46,9 +46,7 @@ class PolyGroup(List[Poly]):
         """
         # create a list of all points in all polygons
         all_points = []
-        test = 1
         for poly in self._polys:
-            test += 1
             all_points.extend(poly.polygon.exterior.coords)
         # for all points, calculate the distance to the center (0,0)
         distances = []

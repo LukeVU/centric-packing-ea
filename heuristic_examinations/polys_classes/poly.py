@@ -10,7 +10,7 @@ class Poly:
     def __init__(self, *args, **kwargs):
         self.polygon = Polygon(*args, **kwargs)
         self.rotation = 0.0
-        self.furthest_point = self.get_furthest_point()
+        # self.get_furthest_distance = self.get_furthest_distance()
         # self.index = None
 
     def __getattr__(self, attr):
@@ -25,7 +25,7 @@ class Poly:
     def __setstate__(self, state):
         self.__dict__ = state
     
-    def get_furthest_point(self) -> Tuple[float, float]:
+    def get_furthest_distance(self) -> Tuple[float, float]:
         """
         Calculates the point in the polygon that is furthest away from the center (0,0).
         """
@@ -37,8 +37,8 @@ class Poly:
         distances = []
         for point in all_points:
             distances.append(math.sqrt(point[0]**2 + point[1]**2))
-        # return the point with the maximum distance
-        return all_points[distances.index(max(distances))]
+        # calculate the distance of the point that is furthest away from the center (0,0)
+        return max(distances)
     
     def translate(self, x_offset: float, y_offset: float):
         """

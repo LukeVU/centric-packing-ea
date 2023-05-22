@@ -1,4 +1,5 @@
 from .EA_barebones import EABarebones
 from .EA_recombination import EARecombination
 from .EA_mutate_closer import EAMutateCloser
+from .EA_variable import EAVariable
 from .ea__functions import randomly_move_polys_to_legal_locations, create_recombined_child, randomly_move_polys_to_legal_locations_closer

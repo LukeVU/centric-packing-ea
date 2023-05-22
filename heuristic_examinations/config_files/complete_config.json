@@ -1,0 +1,98 @@
+{
+    "config1": {
+        "recombination": false,
+        "mutation_direction": false,
+        "mutation_order": false,
+        "variable_step_size": false
+    },
+    "config2": {
+        "recombination": false,
+        "mutation_direction": false,
+        "mutation_order": false,
+        "variable_step_size": true
+    },
+    "config3": {
+        "recombination": false,
+        "mutation_direction": false,
+        "mutation_order": true,
+        "variable_step_size": false
+    },
+    "config4": {
+        "recombination": false,
+        "mutation_direction": false,
+        "mutation_order": true,
+        "variable_step_size": true
+    },
+    "config5": {
+        "recombination": false,
+        "mutation_direction": true,
+        "mutation_order": false,
+        "variable_step_size": false
+    },
+    "config6": {
+        "recombination": false,
+        "mutation_direction": true,
+        "mutation_order": false,
+        "variable_step_size": true
+    },
+    "config7": {
+        "recombination": false,
+        "mutation_direction": true,
+        "mutation_order": true,
+        "variable_step_size": false
+    },
+    "config8": {
+        "recombination": false,
+        "mutation_direction": true,
+        "mutation_order": true,
+        "variable_step_size": true
+    },
+    "config9": {
+        "recombination": true,
+        "mutation_direction": false,
+        "mutation_order": false,
+        "variable_step_size": false
+    },
+    "config10": {
+        "recombination": true,
+        "mutation_direction": false,
+        "mutation_order": false,
+        "variable_step_size": true
+    },
+    "config11": {
+        "recombination": true,
+        "mutation_direction": false,
+        "mutation_order": true,
+        "variable_step_size": false
+    },
+    "config12": {
+        "recombination": true,
+        "mutation_direction": false,
+        "mutation_order": true,
+        "variable_step_size": true
+    },
+    "config13": {
+        "recombination": true,
+        "mutation_direction": true,
+        "mutation_order": false,
+        "variable_step_size": false
+    },
+    "config14": {
+        "recombination": true,
+        "mutation_direction": true,
+        "mutation_order": false,
+        "variable_step_size": true
+    },
+    "config15": {
+        "recombination": true,
+        "mutation_direction": true,
+        "mutation_order": true,
+        "variable_step_size": false
+    },
+    "config16": {
+        "recombination": true,
+        "mutation_direction": true,
+        "mutation_order": true,
+        "variable_step_size": true
+    }
+}

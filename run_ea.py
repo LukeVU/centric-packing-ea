@@ -14,7 +14,7 @@ NUM_CHILDREN = 40
 FIELD_DIAMETER = 20
 
 NUM_GENERATIONS = 500
-NUM_RUNS = 30
+NUM_RUNS = 15
 
 class_mappings = {
     "EABarebones": EABarebones,
@@ -23,6 +23,7 @@ class_mappings = {
 }
 
 list_of_eas = ["EAMutateCloser"]
+
 # BELOW IS FOR GENERATING A NEW POPULATION
 # create_saved_population_group(num_populations= NUM_RUNS, number_of_poly_groups= NUM_SURVIVORS, number_of_polys= NUM_POLYS, field_diameter= FIELD_DIAMETER)
 
@@ -33,18 +34,18 @@ complete_ea_runs = []
 
 total_value = len(list_of_eas) * len(populations) * NUM_GENERATIONS
 
-with tqdm(total=total_value, leave=False, desc=f"Complete progress") as pbar:
+with tqdm(total=total_value, leave=False, desc=f"Complete progress", bar_format="{desc:<30}| {percentage:3.0f}% |{bar:40}| {elapsed}/{remaining} | {n_fmt}/{total_fmt}") as pbar:
     for ea_index, ea_pick in enumerate(list_of_eas):
         complete_runs = []
         populations = read_population_group()
-        with tqdm(total=len(populations) * NUM_GENERATIONS, leave=False, desc=f"EA {ea_index + 1} out of {len(list_of_eas)}: {ea_pick}") as pbar_inner:
+        with tqdm(total=len(populations) * NUM_GENERATIONS, leave=False, desc=f"EA {ea_index + 1} out of {len(list_of_eas)}: {ea_pick}", bar_format="{desc:<30}| {percentage:3.0f}% |{bar:40}| {elapsed}/{remaining} | {n_fmt}/{total_fmt}") as pbar_inner:
             for i in range(len(populations)):
                 complete_run = []
                 populations[i].sort(key=lambda x: x.fitness(), reverse=True)
                 complete_run.append(populations[i])
                 ea = class_mappings[ea_pick](num_survivors=NUM_SURVIVORS, field_diameter=FIELD_DIAMETER, num_children=NUM_CHILDREN)
 
-                for generation in tqdm(range(NUM_GENERATIONS), desc=f"Run {i+1} out of {NUM_RUNS}", leave=False):
+                for generation in tqdm(range(NUM_GENERATIONS), desc=f"Run {i+1} out of {NUM_RUNS}", leave=False, bar_format="{desc:<30}| {percentage:3.0f}% |{bar:40}| {elapsed}/{remaining} | {n_fmt}/{total_fmt}"):
                     populations[i] = ea.step(populations[i])
                     best_fitness = populations[i][0].fitness()
                     single_gen = populations[i]

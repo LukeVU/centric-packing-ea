@@ -1,6 +1,7 @@
 from typing import List, Tuple
 import math, random
 
+
 from ..polys_classes import PolyGroup
 from ..polys_classes import Poly
 # from ..shape_creation import copy_polygroup
@@ -18,11 +19,12 @@ def randomly_move_polys_to_legal_locations(polys: PolyGroup, field_diameter: int
         new_poly = polys._polys[0].copy()
         changing_poly = polys._polys[0].copy()
         polys._polys.remove(polys._polys[0])
+
         x_offset, y_offset = step_calculator(step_size, step_type)
         angle = rotate_calculator(rotate_size, rotate_type)
         changing_poly.translate(x_offset, y_offset)
         changing_poly.rotate(angle)
-        while (overlaps_with_others(changing_poly, polys) or overlaps_with_others(changing_poly, moved_polys) or outside_field(changing_poly, field_diameter)) and attempts > 0:
+        while (overlaps_with_others(changing_poly, polys._polys) or overlaps_with_others(changing_poly, moved_polys) or outside_field(changing_poly, field_diameter)) and attempts_countdown > 0:
             changing_poly = new_poly.copy()
             changing_poly.translate(x_offset, y_offset)
             changing_poly.rotate(angle)
@@ -97,7 +99,7 @@ def randomly_move_polys_to_legal_locations_closer(polys: PolyGroup, field_diamet
         changing_poly.rotate(angle)
 
         new_distance = changing_poly.get_furthest_distance()
-        while (overlaps_with_others(changing_poly, polys) or overlaps_with_others(changing_poly, moved_polys) or outside_field(changing_poly, field_diameter)) and attempts > 0 and new_distance < initial_distance:
+        while (overlaps_with_others(changing_poly, polys._polys) or overlaps_with_others(changing_poly, moved_polys) or outside_field(changing_poly, field_diameter) or (new_distance > initial_distance)) and attempts_countdown > 0:
             changing_poly = new_poly.copy()
             changing_poly.translate(x_offset, y_offset)
             changing_poly.rotate(angle)
@@ -109,7 +111,7 @@ def randomly_move_polys_to_legal_locations_closer(polys: PolyGroup, field_diamet
             attempts_countdown -= 1
         if attempts_countdown == 0:
             moved_polys.append(new_poly)
-            print("failed")
+            # print("failed")
         else:
             moved_polys.append(changing_poly)
 

@@ -4,6 +4,7 @@ from shapely.geometry import Polygon
 from shapely import affinity
 
 
+
 class Poly:
     """A class that represents a polygon. It is a wrapper for the shapely Polygon class."""
 
@@ -25,20 +26,14 @@ class Poly:
     def __setstate__(self, state):
         self.__dict__ = state
     
-    def get_furthest_distance(self) -> Tuple[float, float]:
+
+    def get_furthest_distance(self) -> float:
         """
         Calculates the point in the polygon that is furthest away from the center (0,0).
         """
-        # create a list of all points in the polygon
-        all_points = []
-        for point in self.exterior.coords:
-            all_points.append(point)
-        # for all points, calculate the distance to the center (0,0)
-        distances = []
-        for point in all_points:
-            distances.append(math.sqrt(point[0]**2 + point[1]**2))
-        # calculate the distance of the point that is furthest away from the center (0,0)
-        return max(distances)
+        # Calculate the distance of the point that is furthest away from the center (0,0)
+        return max(math.sqrt(point[0]**2 + point[1]**2) for point in self.exterior.coords)
+
     
     def translate(self, x_offset: float, y_offset: float):
         """
@@ -68,7 +63,6 @@ class Poly:
         poly_copy.rotation = rotation
 
         if self.index is not None:
-            index = self.index
-            poly_copy.index = index
+            poly_copy.index = self.index
 
         return poly_copy

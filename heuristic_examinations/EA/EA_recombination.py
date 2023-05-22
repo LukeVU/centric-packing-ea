@@ -13,7 +13,7 @@ from ..plotter import plot_generation
 class EARecombination(List[PolyGroup]):
     def __init__(self, num_survivors, field_diameter, num_children, std = 0.01,
                 rotate_size = 10, rotate_type = "triangular", step_type = "triangular", 
-                step_size = 10, attempts = 100):
+                step_size = 10, attempts = 10):
         self.num_survivors = num_survivors
         self.field_diameter = field_diameter
         self.std = std #the standard deviation, used as the proportion that a value can mutate with

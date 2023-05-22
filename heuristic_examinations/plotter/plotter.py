@@ -44,10 +44,10 @@ def plot_first_and_last(first, last, field_diameter):
     cmap = get_cmap('gist_rainbow')
     
     # Find the maximum index value for normalization
-    max_index = max(max(poly.index for poly in first[0]._polys), max(poly.index for poly in last[0]._polys))
+    # max_index = max(max(poly.index for poly in first[0]._polys), max(poly.index for poly in last[0]._polys))
     
     # Create a Normalize instance to scale the index values
-    norm = Normalize(vmin=0, vmax=max_index)
+    norm = Normalize(vmin=0, vmax=4)
 
     # plot the polygons in the poly group
     for poly in first[0]._polys:
@@ -133,7 +133,7 @@ def plot_fitness_over_time_multiple_runs(complete_runs, num_evaluations, ea: str
 
     # set the y axis tick locations and labels
     tick_intervals = 0.1
-    tick_locations = np.arange(0, 0.6, 0.1)
+    tick_locations = np.arange(0, 0.8, 0.1)
     tick_labels = [round(i * tick_intervals, 1) for i in range(len(tick_locations))]
     plt.yticks(ticks=tick_locations, labels=tick_labels)
     

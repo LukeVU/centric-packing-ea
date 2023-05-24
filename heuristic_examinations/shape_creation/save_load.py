@@ -47,7 +47,7 @@ def read_population_group(file_name: str = None) -> List[List[PolyGroup]]:
 
     else:
         # look for the file name in the saved_populations folder
-        file_path = os.path.join(os.path.dirname(__file__), "saved_populations", file_name)
+        file_path = os.path.join(os.path.dirname(__file__), "..", "saved_populations", file_name)
 
     # read the population group from the pickle file
     with open(file_path, "rb") as f:

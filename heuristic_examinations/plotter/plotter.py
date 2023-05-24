@@ -133,7 +133,7 @@ def plot_fitness_over_time_multiple_runs(complete_runs, num_evaluations, ea: str
 
     # set the y axis tick locations and labels
     tick_intervals = 0.1
-    tick_locations = np.arange(0, 0.8, 0.1)
+    tick_locations = np.arange(0, 0.9, 0.1)
     tick_labels = [round(i * tick_intervals, 1) for i in range(len(tick_locations))]
     plt.yticks(ticks=tick_locations, labels=tick_labels)
     
@@ -155,9 +155,9 @@ def plot_saver(complete_runs, num_runs: int, number_of_generations : int, number
     plot = plot_fitness_over_time_multiple_runs(complete_runs, number_of_generations, ea)
     if time_params is None:
         now = datetime.datetime.now()
-        file_name = f"{ea}_{num_runs}runs_{number_of_generations}generations_{number_of_polys}polys___{now.year}_{now.month}_{now.day}_{now.hour}_{now.minute}.png"
+        file_name = f"{ea}_{num_runs}runs_{number_of_generations}generations_{number_of_polys}polys___{now.year}_{now.month}_{now.day}_{now.hour}_{now.minute}.jpg"
     else:
-        file_name = f"{ea}_{num_runs}runs_{number_of_generations}generations_{number_of_polys}polys___{time_params}.png"
+        file_name = f"{ea}_{num_runs}runs_{number_of_generations}generations_{number_of_polys}polys___{time_params}.jpg"
     folder_name = f"{num_runs}runs_{number_of_generations}generations_{number_of_polys}polys"
     file_path = os.path.join(os.path.dirname(__file__), "..", "plots", "fitness_plots", folder_name, file_name)
     os.makedirs(os.path.dirname(file_path), exist_ok=True)

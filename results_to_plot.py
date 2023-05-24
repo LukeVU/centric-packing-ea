@@ -6,10 +6,13 @@ from heuristic_examinations.plotter import plot_generation, plot_first_and_last,
 from tqdm import tqdm
 import datetime
 import pickle
+import os
+
+############ FOR FILE
 
 # converts results from a pickle file to a plot
 
-file_name = "heuristic_examinations\\results\\eas_['EABarebones', 'EARecombination']_10_generations_5_runs_5_polys_10_survivors_40_children___2023_5_20_14_17.pkl"
+file_name = "heuristic_examinations\\results\\results_collection1\\eas_config1_500_generations_30_runs_5_polys_10_survivors_40_children___2023_5_23_14_32.pkl"
 
 with open(file_name, "rb") as f:
     complete_ea_runs = pickle.load(f)
@@ -34,3 +37,33 @@ time_params = split_part[1]
 
 for i in range(len(complete_ea_runs)):
     plot_saver(complete_ea_runs[i], NUM_RUNS, NUM_GENERATIONS, NUM_POLYS, list_of_eas[i], time_params)
+
+
+############# FOR FOLDER
+
+# folder_path = "heuristic_examinations\\results\\results_collection1"
+
+
+# for file_name in os.listdir(folder_path):
+#     file_path = os.path.join(folder_path, file_name)
+#     with open(file_path, "rb") as f:
+#         complete_ea_runs = pickle.load(f)
+
+
+#     file_name = file_name.split(".")[0]
+
+#     # save before the ___ as the file_name_params, and after the ___ as time_params
+#     split_part = file_name.split("___")
+#     file_name_params = split_part[0]
+#     file_name_params = file_name_params.split("_")
+#     config = file_name_params[1]
+#     NUM_GENERATIONS = int(file_name_params[2])
+#     NUM_RUNS = int(file_name_params[4])
+#     NUM_POLYS = int(file_name_params[6])
+#     NUM_SURVIVORS = int(file_name_params[8])
+#     NUM_CHILDREN = int(file_name_params[10])
+
+#     time_params = split_part[1]
+
+
+#     plot_saver(complete_ea_runs, NUM_RUNS, NUM_GENERATIONS, NUM_POLYS, config, time_params)

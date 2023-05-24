@@ -14,8 +14,8 @@ NUM_SURVIVORS = 10
 NUM_CHILDREN = 40
 FIELD_DIAMETER = 20
 
-NUM_GENERATIONS = 500
-NUM_RUNS = 15
+NUM_GENERATIONS = 15
+NUM_RUNS = 10
 
 with open('heuristic_examinations/config_files/complete_config.json') as f:
     config_file = json.load(f)
@@ -23,8 +23,8 @@ with open('heuristic_examinations/config_files/complete_config.json') as f:
 list_of_configs = []
 list_of_configs.append("config1")
 list_of_configs.append("config2")
-list_of_configs.append("config3")
-list_of_configs.append("config4")
+# list_of_configs.append("config3")
+# list_of_configs.append("config4")
 # list_of_configs.append("config5")
 # list_of_configs.append("config6")
 # list_of_configs.append("config7")

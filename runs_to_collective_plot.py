@@ -15,7 +15,7 @@ complete_fitness_lists = []
 configs = []
 
 # path to the folder in the results folder that contains the results to be plotted
-folder_path = "heuristic_examinations\\results\\multi_full_step5"
+folder_path = "heuristic_examinations\\results\\multi_8poly"
 
 # iterate through the files in the folder
 for file_name in os.listdir(folder_path):
@@ -102,8 +102,8 @@ plt.gcf().set_size_inches(8, 6)
 plt.gcf().subplots_adjust(left=0.1, bottom=0.15)
 
 # save the plot
-file_name = f"multi_full_step5_{num_runs}runs_{num_generations}generations_{evals_per_generation}evals.jpg"
-file_path = os.path.join(os.path.dirname(__file__), "heuristic_examinations", "plots", "fitness_plots", "30runs_500generations_5polys", "multi_step_size_5", file_name)
+file_name = f"multi_full_step1_{num_runs}runs_{num_generations}generations_{evals_per_generation}evals.jpg"
+file_path = os.path.join(os.path.dirname(__file__), "heuristic_examinations", "plots", "fitness_plots", "30runs_500generations_8polys", "multi_8poly", file_name)
 os.makedirs(os.path.dirname(file_path), exist_ok=True)
 # plt.show()
 plt.savefig(file_path, dpi=300)

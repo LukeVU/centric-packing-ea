@@ -40,7 +40,7 @@ list_of_configs.append("config16")
 # config9: only recombination is true
 # config16: everything is true
 
-NUM_POLYS = 5
+NUM_POLYS = 8
 NUM_SURVIVORS = 10
 NUM_CHILDREN = 40
 FIELD_DIAMETER = 20

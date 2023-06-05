@@ -12,6 +12,7 @@ import dill as pickle
 import datetime
 import sys
 import os
+from tqdm import tqdm
 
 def create_saved_population_group(num_populations: int, number_of_poly_groups : int, number_of_polys: int, field_diameter: int, 
                         step_size = .2, step_type = "triangular", rotate_size: float = 0.1, 
@@ -19,7 +20,8 @@ def create_saved_population_group(num_populations: int, number_of_poly_groups : 
                         irregularity: float = 0.5, spikiness: float = 0.5,
                         num_vertices: int = 4) -> None:
     population_group = []
-    for i in range(num_populations):
+    # progress bar for creating the population group
+    for i in tqdm(range(num_populations), desc=f"Creating population group", leave=False, bar_format="{desc:<30}| {percentage:3.0f}% |{bar:40}| {elapsed}/{remaining} | {n_fmt}/{total_fmt}"):
         population_group.append(generate_population(number_of_poly_groups, number_of_polys, field_diameter, step_size, step_type, rotate_size, rotate_type, size, irregularity, spikiness, num_vertices))
 
     # create the file name for the population group

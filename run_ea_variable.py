@@ -9,20 +9,20 @@ import pickle
 import os
 import json
 
-NUM_POLYS = 5
-NUM_SURVIVORS = 10
-NUM_CHILDREN = 40
+NUM_POLYS = 4
+NUM_SURVIVORS = 1
+NUM_CHILDREN = 3
 FIELD_DIAMETER = 20
 
-NUM_GENERATIONS = 15
-NUM_RUNS = 10
+NUM_GENERATIONS = 2
+NUM_RUNS = 1
 
 with open('heuristic_examinations/config_files/complete_config.json') as f:
     config_file = json.load(f)
 
 list_of_configs = []
 list_of_configs.append("config1")
-list_of_configs.append("config2")
+# list_of_configs.append("config2")
 # list_of_configs.append("config3")
 # list_of_configs.append("config4")
 # list_of_configs.append("config5")
@@ -78,7 +78,7 @@ with tqdm(total=total_value, leave=False, desc=f"Complete progress", bar_format=
                 complete_runs.append(complete_run)
         complete_ea_runs.append(complete_runs)
 
-        plot_saver(complete_runs, NUM_RUNS, NUM_GENERATIONS, NUM_POLYS, config_pick)
+        # plot_saver(complete_runs, NUM_RUNS, NUM_GENERATIONS, NUM_POLYS, config_pick)
 
 # save complete ea runs as a pickle file
 now = datetime.datetime.now()

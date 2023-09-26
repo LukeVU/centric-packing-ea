@@ -6,6 +6,7 @@ from ..polys_classes import Poly
 # from ..shape_creation import copy_polygroup
 from ..polys_classes import step_calculator, rotate_calculator, overlaps_with_others, outside_field
 from .ea__functions import randomly_move_polys_to_legal_locations, create_recombined_child, randomly_move_polys_to_legal_locations_closer
+from ..plotter import plot_generation, plot_first_and_last, plot_fitness_over_time, plot_fitness_over_time_multiple_runs, plot_saver
 
 
 class EAVariable(List[PolyGroup]):
@@ -25,6 +26,7 @@ class EAVariable(List[PolyGroup]):
         self.attempts = attempts
 
     def parent_selection(self, generation):
+        
         # IF RECOMBINATION IS TRUE
         if self.config_file[self.config]["recombination"] == True:
             # NOTE: currently only works with even population sizes
@@ -133,6 +135,9 @@ class EAVariable(List[PolyGroup]):
         return survivors
     
     def step(self, generation, generation_number):
+
+        plot_generation(generation, self.field_diameter)
+
         if self.config_file[self.config]["variable_step_size"] == True:
             self.current_step_size = self.step_size / math.sqrt(generation_number + 1)
             
@@ -142,7 +147,13 @@ class EAVariable(List[PolyGroup]):
         children = self.recombination(parents)
         # mutate children
         mutated_children = self.mutation(children)
+
+
+        plot_generation(mutated_children, self.field_diameter)
         # select survivors
         survivors = self.survivor_selection(parents, mutated_children)
         # return the survivors
+
+
+        
         return survivors

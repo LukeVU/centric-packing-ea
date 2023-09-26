@@ -9,37 +9,52 @@ import datetime
 def plot_generation(generation, field_diameter, save=False, save_name=""):
     num_cols = len(generation)
     fig, axs = plt.subplots(1, num_cols, figsize=(15, 5))
+    
+    # Iterate over each generation
     for i in range(len(generation)):
-        # plot the polygons in the poly group
+        if num_cols == 1:
+            ax = axs
+        else:
+            ax = axs[i]
+        
+        # Plot the polygons in the poly group
         for poly in generation[i]._polys:
-            axs[i].plot(*poly.polygon.exterior.xy)
-        # add the rotation of each polygon at the centroid of each polygon
-        for poly in generation[i]._polys:
-            rotation_string = str(round(poly.rotation, 2))
-            axs[i].text(poly.polygon.centroid.x-(len(rotation_string))/2.5, poly.polygon.centroid.y, rotation_string)
-        # set the x and y limits of the plot to the field diameter
-        axs[i].set_xlim(-field_diameter, field_diameter)
-        axs[i].set_ylim(-field_diameter, field_diameter)
-        # set the aspect ratio to 1 so that the polygons are not distorted
-        axs[i].set_aspect(1)
-        # give each polygon an exterior color based on its index. it has no fill color
-        for poly in generation[i]._polys:
-            x, y = poly.polygon.exterior.xy
-            axs[i].fill(x, y, color=(poly.index/len(generation[i]._polys), 0, 0, 0), linewidth=1)
+            ax.plot(*poly.polygon.exterior.coords.xy, color=plt.cm.nipy_spectral(poly.index / len(generation[i]._polys)))  # Modified line
+        
+        # Add the rotation of each polygon at the centroid of each polygon
+        # for poly in generation[i]._polys:
+        #     rotation_string = str(round(poly.rotation, 2))
+        #     ax.text(poly.polygon.centroid.x-(len(rotation_string))/2.5, poly.polygon.centroid.y, rotation_string)
+        
+        # Set the x and y limits of the plot to the field diameter
+        ax.set_xlim(-field_diameter, field_diameter)  # Modified line
+        ax.set_ylim(-field_diameter, field_diameter)  # Modified line
+        
+        # Set the aspect ratio to 1 so that the polygons are not distorted
+        ax.set_aspect(1)  # Modified line
+        
+        # Give each polygon an edge color based on its index number
+        # for poly in generation[i]._polys:
+        #     x, y = poly.polygon.exterior.xy
+        #     ax.fill(x, y, fill=False, edgecolor=(poly.index/len(generation[i]._polys), 0, 0, 1), linewidth=1)  # Modified line
+            
+        #     index_string = str(poly.index)
+        #     ax.text(poly.polygon.centroid.x-(len(index_string))/2.5, poly.polygon.centroid.y - 2, index_string)
 
-        for poly in generation[i]._polys:
-            index_string = str(poly.index)
-            axs[i].text(poly.polygon.centroid.x-(len(index_string))/2.5, poly.polygon.centroid.y - 2, index_string)
 
     plt.tight_layout()
     if save:
         plt.savefig(save_name)
     plt.show()
 
-def plot_first_and_last(first, last, field_diameter):
+def plot_first_and_last(first, last, field_diameter, config_name=""):
     fig, axs = plt.subplots(1, 2, figsize=(10, 5))
     axs[0].set_title("First Generation")
     axs[1].set_title("Last Generation")
+
+    # set title to config name
+    if config_name != "":
+        fig.suptitle(config_name)
     
     cmap = get_cmap('gist_rainbow')
     
@@ -56,12 +71,12 @@ def plot_first_and_last(first, last, field_diameter):
         axs[1].plot(*poly.polygon.exterior.xy, color=cmap(norm(poly.index)))
 
     # add the index of each polygon at the centroid of each polygon
-    for poly in first[0]._polys:
-        index_string = str(poly.index)
-        axs[0].text(poly.polygon.centroid.x-(len(index_string))/2.5, poly.polygon.centroid.y, index_string)
-    for poly in last[0]._polys:
-        index_string = str(poly.index)
-        axs[1].text(poly.polygon.centroid.x-(len(index_string))/2.5, poly.polygon.centroid.y, index_string)
+    # for poly in first[0]._polys:
+    #     index_string = str(poly.index)
+    #     axs[0].text(poly.polygon.centroid.x-(len(index_string))/2.5, poly.polygon.centroid.y, index_string)
+    # for poly in last[0]._polys:
+    #     index_string = str(poly.index)
+    #     axs[1].text(poly.polygon.centroid.x-(len(index_string))/2.5, poly.polygon.centroid.y, index_string)
     
     # set the x and y limits of the plot to the field diameter
     axs[0].set_xlim(-field_diameter, field_diameter)
@@ -72,14 +87,31 @@ def plot_first_and_last(first, last, field_diameter):
     axs[0].set_aspect(1)
     axs[1].set_aspect(1)
 
+    # hide the axis ticks
+    axs[0].set_xticks([])
+    axs[0].set_yticks([])
+    axs[1].set_xticks([])
+    axs[1].set_yticks([])
+
     # add the circle of the minimal circumscribed circle to each plot
-    circle_first = plt.Circle((0, 0), first[0].get_minimal_circumscribed_circle_radius(), color='r', fill=False)
-    axs[0].add_artist(circle_first)
-    circle_last = plt.Circle((0, 0), last[0].get_minimal_circumscribed_circle_radius(), color='r', fill=False)
-    axs[1].add_artist(circle_last)
+    # circle_first = plt.Circle((0, 0), first[0].get_minimal_circumscribed_circle_radius(), color='r', fill=False)
+    # axs[0].add_artist(circle_first)
+    # circle_last = plt.Circle((0, 0), last[0].get_minimal_circumscribed_circle_radius(), color='r', fill=False)
+    # axs[1].add_artist(circle_last)
+
+    # add the fitness of each plot as a text box
+    # axs[0].text(0.05, 0.95, f"Fitness: {first[0].fitness():.3f}", transform=axs[0].transAxes, bbox=dict(facecolor='white', alpha=0.5, boxstyle='round'))
+    # axs[1].text(0.05, 0.95, f"Fitness: {last[0].fitness():.3f}", transform=axs[1].transAxes, bbox=dict(facecolor='white', alpha=0.5, boxstyle='round'))
+
+    # add a red dot at the center of each plot
+    axs[0].plot(0, 0, 'ro')
+    axs[1].plot(0, 0, 'ro')
 
     plt.tight_layout()
-    plt.show()
+    # plt.show()
+    plot_path = "heuristic_examinations\\plots\\first_last_plots\\the_run\\"
+    os.makedirs(plot_path, exist_ok=True)
+    plt.savefig(plot_path + f"{config_name}.jpg", dpi=200)
 
 
 def plot_fitness_over_time(complete_run):

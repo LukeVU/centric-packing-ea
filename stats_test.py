@@ -63,19 +63,19 @@ p_limit = 0.05
 
 for pair in pairs:
     H, p_value = wilcoxon(pair[0], pair[1])
-    formatted_p_value = format(p_value, ".20f")
+    formatted_p_value = format(p_value, ".10f")
     # formatted_h = format(H, ".100f")
     # give the index of the pair in the average_list
-    if p_value < p_limit:
-        note = "SIGNIFICANT"
-    else:
-        note = "NOT SIGNIFICANT"
-    print(f"### {note} ### The pair config{final_fitness_lists.index(pair[0])+1} and config{final_fitness_lists.index(pair[1])+1} have a \n H statistic of {H} \n p-value of {formatted_p_value} \n")
+    # if p_value < p_limit:
+    #     note = "SIGNIFICANT"
+    # else:
+    #     note = "NOT SIGNIFICANT"
+    print(f"The pair config{final_fitness_lists.index(pair[0])+1} and config{final_fitness_lists.index(pair[1])+1} have a p-value of {formatted_p_value}")
 
-for pair in pairs:
-    H, p_value = wilcoxon(pair[0], pair[1])
-    if p_value > p_limit:
-        print(f"config{final_fitness_lists.index(pair[0])+1} and config{final_fitness_lists.index(pair[1])+1} are similar and have a p-value of {p_value}")
+# for pair in pairs:
+#     H, p_value = wilcoxon(pair[0], pair[1])
+#     if p_value > p_limit:
+#         print(f"config{final_fitness_lists.index(pair[0])+1} and config{final_fitness_lists.index(pair[1])+1} are similar and have a p-value of {p_value}")
 
 
 

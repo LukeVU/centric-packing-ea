@@ -71,12 +71,12 @@ def plot_first_and_last(first, last, field_diameter, config_name=""):
         axs[1].plot(*poly.polygon.exterior.xy, color=cmap(norm(poly.index)))
 
     # add the index of each polygon at the centroid of each polygon
-    # for poly in first[0]._polys:
-    #     index_string = str(poly.index)
-    #     axs[0].text(poly.polygon.centroid.x-(len(index_string))/2.5, poly.polygon.centroid.y, index_string)
-    # for poly in last[0]._polys:
-    #     index_string = str(poly.index)
-    #     axs[1].text(poly.polygon.centroid.x-(len(index_string))/2.5, poly.polygon.centroid.y, index_string)
+    for poly in first[0]._polys:
+        index_string = str(poly.index)
+        axs[0].text(poly.polygon.centroid.x-(len(index_string))/2.5, poly.polygon.centroid.y, index_string)
+    for poly in last[0]._polys:
+        index_string = str(poly.index)
+        axs[1].text(poly.polygon.centroid.x-(len(index_string))/2.5, poly.polygon.centroid.y, index_string)
     
     # set the x and y limits of the plot to the field diameter
     axs[0].set_xlim(-field_diameter, field_diameter)
@@ -94,24 +94,76 @@ def plot_first_and_last(first, last, field_diameter, config_name=""):
     axs[1].set_yticks([])
 
     # add the circle of the minimal circumscribed circle to each plot
-    # circle_first = plt.Circle((0, 0), first[0].get_minimal_circumscribed_circle_radius(), color='r', fill=False)
-    # axs[0].add_artist(circle_first)
-    # circle_last = plt.Circle((0, 0), last[0].get_minimal_circumscribed_circle_radius(), color='r', fill=False)
-    # axs[1].add_artist(circle_last)
+    circle_first = plt.Circle((0, 0), first[0].get_minimal_circumscribed_circle_radius(), color='r', fill=False)
+    axs[0].add_artist(circle_first)
+    circle_last = plt.Circle((0, 0), last[0].get_minimal_circumscribed_circle_radius(), color='r', fill=False)
+    axs[1].add_artist(circle_last)
 
     # add the fitness of each plot as a text box
-    # axs[0].text(0.05, 0.95, f"Fitness: {first[0].fitness():.3f}", transform=axs[0].transAxes, bbox=dict(facecolor='white', alpha=0.5, boxstyle='round'))
-    # axs[1].text(0.05, 0.95, f"Fitness: {last[0].fitness():.3f}", transform=axs[1].transAxes, bbox=dict(facecolor='white', alpha=0.5, boxstyle='round'))
+    axs[0].text(0.05, 0.95, f"Fitness: {first[0].fitness():.3f}", transform=axs[0].transAxes, bbox=dict(facecolor='white', alpha=0.5, boxstyle='round'))
+    axs[1].text(0.05, 0.95, f"Fitness: {last[0].fitness():.3f}", transform=axs[1].transAxes, bbox=dict(facecolor='white', alpha=0.5, boxstyle='round'))
 
     # add a red dot at the center of each plot
-    axs[0].plot(0, 0, 'ro')
-    axs[1].plot(0, 0, 'ro')
+    # axs[0].plot(0, 0, 'ro')
+    # axs[1].plot(0, 0, 'ro')
 
     plt.tight_layout()
-    # plt.show()
-    plot_path = "heuristic_examinations\\plots\\first_last_plots\\the_run\\"
-    os.makedirs(plot_path, exist_ok=True)
-    plt.savefig(plot_path + f"{config_name}.jpg", dpi=200)
+    plt.show()
+    # plot_path = "heuristic_examinations\\plots\\first_last_plots\\the_run\\"
+    # os.makedirs(plot_path, exist_ok=True)
+    # plt.savefig(plot_path + f"{config_name}.jpg", dpi=200)
+
+def plot_last_gen(last, field_diameter, config_name=""):
+    fig, axs = plt.subplots(1, 1, figsize=(5, 5))
+    # axs.set_title("Last Generation")
+
+    # set title to config name
+    # if config_name != "":
+    #     fig.suptitle(config_name)
+    
+    cmap = get_cmap('gist_rainbow')  # use a larger range of colors
+    
+    # Find the maximum index value for normalization
+    # max_index = max(poly.index for poly in last[0]._polys)
+    
+    # Create a Normalize instance to scale the index values
+    norm = Normalize(vmin=0, vmax=len(last[0]._polys))
+
+    # plot the polygons in the poly group
+    for poly in last[0]._polys:
+        color = cmap(norm(poly.index))
+        axs.plot(*poly.polygon.exterior.xy, color=color)
+
+    # add the index of each polygon at the centroid of each polygon
+    # for poly in last[0]._polys:
+    #     index_string = str(poly.index)
+    #     axs.text(poly.polygon.centroid.x-(len(index_string))/2.5, poly.polygon.centroid.y, index_string)
+    
+    # set the x and y limits of the plot to the field diameter
+    axs.set_xlim(-field_diameter, field_diameter)
+    axs.set_ylim(-field_diameter, field_diameter)
+    # set the aspect ratio to 1 so that the polygons are not distorted
+    axs.set_aspect(1)
+
+    # hide the axis ticks
+    axs.set_xticks([])
+    axs.set_yticks([])
+
+    # # add the circle of the minimal circumscribed circle to each plot
+    # circle_last = plt.Circle((0, 0), last[0].get_minimal_circumscribed_circle_radius(), color='r', fill=False)
+    # axs.add_artist(circle_last)
+
+    # # add the fitness of each plot as a text box
+    # axs.text(0.05, 0.95, f"Fitness: {last[0].fitness():.3f}", transform=axs.transAxes, bbox=dict(facecolor='white', alpha=0.5, boxstyle='round'))
+
+    # # add a red dot at the center of each plot
+    # axs.plot(0, 0, 'ro')
+
+    plt.tight_layout()
+    plt.show()
+    # plot_path = "heuristic_examinations\\plots\\first_last_plots\\the_run\\"
+    # os.makedirs(plot_path, exist_ok=True)
+    # plt.savefig(plot_path + f"{config_name}.jpg", dpi=200)
 
 
 def plot_fitness_over_time(complete_run):

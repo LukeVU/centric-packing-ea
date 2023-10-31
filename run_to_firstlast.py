@@ -22,12 +22,11 @@ import os
 #     config_run = config[0][4]
 #     plot_first_and_last(config_run[0], config_run[-1], 20, config_name)
 
-file = "heuristic_examinations\\results\\multi_full_step5\\eas_config10_500_generations_30_runs_5_polys_10_survivors_40_children___2023_5_23_23_46.pkl"
-config_name = file.split("_")[1]
+file = "heuristic_examinations\\results\\multi_full_step5\\eas_config1_500_generations_30_runs_5_polys_10_survivors_40_children___2023_5_23_21_48.pkl"
+config_name = file.split("_")[4]
 with open(file, "rb") as f:
     config = pickle.load(f)
 config_run = config[0]
-i = 0
+
 for run in config_run:
-    plot_first_and_last(run[0], run[-1], 20, i)
-    i += 1
+    plot_first_and_last(run[0], run[-1], 20, config_name)

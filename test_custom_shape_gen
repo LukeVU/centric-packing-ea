@@ -1,0 +1,29 @@
+from heuristic_examinations.polys_classes import PolyGroup, Poly
+from heuristic_examinations.shape_creation import generate_custom_population
+from heuristic_examinations.plotter import plot_generation
+
+from typing import List
+
+# Define the 8 unique convex polygons
+poly1 = Poly([[0,0], [0,2], [2,2], [2,0], [0,0]])
+poly2 = Poly([[0,0], [0,3], [3,3], [2,0], [0,0]])
+poly3 = Poly([[0,0], [0,4], [2,3], [2,1], [0,0]])
+poly4 = Poly([[0,0], [0,3], [4,2], [3,1], [0,0]])
+poly5 = Poly([[0,0], [2,3], [4,4], [3,2], [0,0]])
+poly6 = Poly([[0,0], [0,5], [4,3], [4,1], [0,0]])
+poly7 = Poly([[0,0], [1,4], [5,1], [2,0], [0,0]])
+poly8 = Poly([[0,0], [1,1], [3,1], [2,0], [0,0]])
+
+# Add the polygons to a list
+polys: List[Poly] = [poly1, poly2, poly3, poly4, poly5, poly6, poly7, poly8]
+
+population_unique = generate_custom_population(5, polys, 20)
+
+# print the population
+for poly_group in population_unique:
+    print("THIS IS A NEW POLY GROUP")
+    for poly in poly_group._polys:
+        print(poly.__str__() + "\n")
+
+# plot the population
+plot_generation(population_unique, 20)

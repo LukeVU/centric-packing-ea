@@ -136,7 +136,7 @@ class EAVariable(List[PolyGroup]):
     
     def step(self, generation, generation_number):
 
-        plot_generation(generation, self.field_diameter)
+        # plot_generation(generation, self.field_diameter)
 
         if self.config_file[self.config]["variable_step_size"] == True:
             self.current_step_size = self.step_size / math.sqrt(generation_number + 1)
@@ -149,7 +149,7 @@ class EAVariable(List[PolyGroup]):
         mutated_children = self.mutation(children)
 
 
-        plot_generation(mutated_children, self.field_diameter)
+        # plot_generation(mutated_children, self.field_diameter)
         # select survivors
         survivors = self.survivor_selection(parents, mutated_children)
         # return the survivors
